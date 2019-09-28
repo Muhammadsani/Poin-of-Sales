@@ -13,7 +13,6 @@ Route
     .patch('/reduce/:id', productController.reduceProduct) // reduce product
     .patch('/plus/:id', productController.plusProduct) // add quantity product
     .delete('/:id', productController.deleteProduct) // delete product 
-    //.post('/img', fileUpload, productController.uploadProduct)
 
 
 module.exports = Route

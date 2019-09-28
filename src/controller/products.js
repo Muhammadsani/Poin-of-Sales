@@ -4,13 +4,13 @@ const productModel = require('../models/products')
 module.exports = {
     getProducts: (req, res) => { //get all product
         const {search, limit, page, sort} = req.query
-        
         productModel.getProducts(sort, limit, page, search)
             .then(result => {
                 res.json({
                     result
                 })
             })
+
             .catch(err => {
                 console.log(err)
                 res.status(500).json({
@@ -78,18 +78,22 @@ module.exports = {
         }    
     },
     updateProduct: (req, res) => {  // UPDATE Product
-        const date_updated = new Date()
+        
+        //const { name , price , category , description , quantity } = req.body
+        let data
+        if(!req.file){ // Handler if image doesnt upload
+            data = {...req.body}
 
-        const { name , price , category , description , quantity } = req.body
-        const image = req.file.filename
-        const data = { name , price , image , category , description , quantity, date_updated }
-
-        //const data = { ...req.body, date_updated }
+        }else{
+            const image = req.file.filename
+            data = {image , ...req.body}
+        }
+        
         const {id} = req.params
         const idProduct = id
-        
-        if (quantity && quantity < 0) {
-            res.status(400).json({
+
+        if (req.body.quantity && req.body.quantity < 0) {
+            return res.status(400).json({
                 status: 400,
                 message: 'quantity cannot below 0'
             })
