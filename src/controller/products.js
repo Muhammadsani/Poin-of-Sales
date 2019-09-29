@@ -6,7 +6,10 @@ module.exports = {
         const {search, limit, page, sort} = req.query
         productModel.getProducts(sort, limit, page, search)
             .then(result => {
-                res.json({
+                res.status(200).json({
+                    status: 200,
+                    message: 'Sucses get all data',
+                    jumlah : result.length,
                     result
                 })
             })
@@ -24,9 +27,16 @@ module.exports = {
         const data = id
         productModel.getProduct(data)
             .then(result => {
-                res.json({
-                    result
-                })
+                if (result.length == 0) {
+                    res.status(404).json({
+                        status: 404,
+                        message: 'Data doesn\'t exist'
+                    })
+                } else {
+                    res.json({
+                        result
+                    })
+                }
             })
             .catch(err => {
                 console.log(err)
@@ -37,15 +47,19 @@ module.exports = {
             })
     },
     addProduct: async (req, res) => { // Add Product
-        const { name , price , category , description , quantity } = req.body
-        const image = req.file.filename
-        const data = { name , price , image , category , description , quantity }
+        let data
+        if(!req.file){ // Handler if image doesnt upload
+            data = {...req.body}
 
-       // upload.single(req.file.filename
-        console.log(req.file.filename)
+        }else{
+            const image = req.file.filename
+            data = {image , ...req.body}
+        }
 
-        if(req.body.quantity >= 0){
-            let isProductAvaileble = await productModel.getProductByName(name)
+        const quantity = (req.body.quantity)? req.body.quantity : 0
+        console.log(quantity)
+        if(quantity >= 0){
+            let isProductAvaileble = await productModel.getProductByName(req.body.name)
             console.log(isProductAvaileble[0].product)
             if( isProductAvaileble[0].product== 0){ //handler duplicate name of product
                 productModel.addProduct(data)
@@ -53,7 +67,7 @@ module.exports = {
                     res.json({
                         status: 200,
                         message: 'success adding data',
-                        result
+                        data
                     })
                 })
                 .catch(err => {
@@ -67,7 +81,6 @@ module.exports = {
                 res.json({
                     status: 400,
                     message: 'Error, Product already in database!',
-                    name 
                 })
             }
         }else{

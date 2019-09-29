@@ -1,5 +1,5 @@
 const conn = require('../configs/db')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 
 module.exports = {
     getUsers: () => { 

@@ -4,7 +4,8 @@ module.exports = {
     getProducts: (sortby, limit, page = 1, search) => { 
         const offset = (page - 1) * limit
         return new Promise((resolve, reject) => {
-            conn.query(`SELECT p.id AS id, p.name, p.price, p.image, c.name AS category, p.description, p.quantity, p.date_added, p.date_updated FROM product AS p INNER JOIN categories AS c ON p.category=c.id ${search ? `WHERE p.name LIKE '%${search}%'` : ''} ${limit ? `LIMIT ${limit} OFFSET ${offset}` : ''} ${sortby ? `ORDER BY p.${sortby}` : ''}`, 
+            //conn.query(`SELECT p.id AS id, p.name, p.price, p.image, c.name AS category, p.description, p.quantity, p.date_added, p.date_updated FROM product AS p INNER JOIN categories AS c ON p.category=c.id ${search ? `WHERE p.name LIKE '%${search}%'` : ''} ${limit ? `LIMIT ${limit} OFFSET ${offset}` : ''} ${sortby ? `ORDER BY p.${sortby}` : ''}`, 
+            conn.query(`SELECT p.id AS id, p.name, p.price, p.image, c.name AS category, p.description, p.quantity, p.date_added, p.date_updated FROM product AS p INNER JOIN categories AS c ON p.category=c.id ${search ? `WHERE p.name LIKE '%${search}%'` : ''} ${sortby ? `ORDER BY p.${sortby}` : 'ORDER BY p.id'} ${limit ? `LIMIT ${limit} OFFSET ${offset}` : ''}`, 
             (err, result) => {
                 if (!err) {
                     resolve(result)

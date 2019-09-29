@@ -7,7 +7,7 @@ Route
     .get('/', auth.access, userController.getUsers) 
     .post('/signup', userController.addUser) 
     .post('/login', userController.loginUser) 
-    .patch('/:id', userController.updateUser)
+    .patch('/:id', auth.access, userController.updateUser)
 
 
 module.exports = Route
