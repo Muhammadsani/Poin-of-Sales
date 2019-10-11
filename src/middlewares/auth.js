@@ -7,8 +7,8 @@ module.exports = {
             const token = req.headers.authorization.split(/\s/)[1]
             jwt.verify(token, process.env.JWT_KEY, err => {
                 if(err){
-                    return res.status(401).json({
-                        message : "error, you must loggin first"
+                    return res.status(403).json({
+                        message : "Sorry, you must loggin first"
                     })
                 }else{
                     next()

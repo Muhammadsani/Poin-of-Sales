@@ -8,6 +8,7 @@ const routeNav = require('./src/index')
 // use app
 const app = express()       // use express
 app.use(cors())             // use CORS
+app.use(express.static('public'))
 app.use(bodyParser.json())  // use bodyparser from json
 app.use(bodyParser.urlencoded({extended: true})) // use bodyparser from url-encoded
 app.use(logger('dev'))      // use morgan for logger

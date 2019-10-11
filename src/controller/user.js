@@ -60,6 +60,7 @@ module.exports = {
     },
     loginUser: async (req, res) => {
         const email = String(req.body.email).toLocaleLowerCase()
+        console.log(email)
         const isRegistered = await userModel.getByEmailUsers(email)
         if(isRegistered.length>0){
             bcrypt.compare(req.body.password, isRegistered[0].password, (err, result) => {
@@ -82,6 +83,8 @@ module.exports = {
                     res.status(200).json({
                         status: 200,
                         message: 'success login',
+                        email : email,
+                        id : isRegistered[0].id,
                         token: token
                     })
                 } else {
